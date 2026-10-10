@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AIRLINK | Booking Status</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+
+            margin: 0;
+
+            font-family:
+                'Segoe UI',
+                Roboto,
+                Arial,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f8fcff,
+                    #eef7ff,
+                    #e8f4ff
+                );
+
+            color: #172b4d;
+
+            min-height: 100vh;
+        }
+
+
+        /* ================================
+           NAVBAR
+        ================================= */
+
+        .navbar {
+
+            height: 72px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 0 55px;
+
+            background: rgba(255,255,255,0.97);
+
+            border-bottom: 1px solid #e3edf7;
+
+            box-shadow:
+                0 3px 15px rgba(40,90,140,0.08);
+        }
+
+
+        .logo {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            font-size: 27px;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+            color: #1769e0;
+        }
+
+
+        .logo-icon {
+
+            width: 38px;
+
+            height: 38px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 11px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1677ff,
+                    #45a1ff
+                );
+
+            color: white;
+
+            font-size: 19px;
+
+            box-shadow:
+                0 6px 15px
+                rgba(22,119,255,0.24);
+        }
+
+
+        .logo span {
+            color: #12bfa5;
+        }
+
+
+        .nav-links {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 27px;
+        }
+
+
+        .nav-links a {
+
+            text-decoration: none;
+
+            color: #4e6380;
+
+            font-size: 14px;
+
+            font-weight: 500;
+
+            transition: 0.25s;
+        }
+
+
+        .nav-links a:hover {
+
+            color: #1677ff;
+        }
+
+
+        .active {
+
+            color: #1677ff !important;
+
+            background: #edf5ff;
+
+            padding: 9px 14px;
+
+            border-radius: 9px;
+
+            font-weight: 600 !important;
+        }
+
+
+        /* ================================
+           PAGE
+        ================================= */
+
+        .page-container {
+
+            width: 88%;
+
+            max-width: 1200px;
+
+            margin: 0 auto;
+
+            padding: 55px 0 80px;
+        }
+
+
+        .page-badge {
+
+            display: inline-block;
+
+            padding: 7px 14px;
+
+            border-radius: 20px;
+
+            background: #e9f4ff;
+
+            color: #1677ff;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.5px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .page-title {
+
+            margin: 0;
+
+            font-size: 34px;
+
+            color: #172b4d;
+        }
+
+
+        .page-subtitle {
+
+            margin-top: 9px;
+
+            margin-bottom: 32px;
+
+            color: #7186a2;
+
+            font-size: 14px;
+        }
+
+
+        /* ================================
+           SUMMARY CARD
+        ================================= */
+
+        .summary-card {
+
+            background: white;
+
+            border: 1px solid #e1edf8;
+
+            border-radius: 18px;
+
+            padding: 22px 25px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 28px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(40,100,160,0.07);
+        }
+
+
+        .summary-left {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+
+        .summary-icon {
+
+            width: 48px;
+
+            height: 48px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 13px;
+
+            background: #e9f4ff;
+
+            color: #1677ff;
+
+            font-size: 22px;
+        }
+
+
+        .summary-text h3 {
+
+            margin: 0;
+
+            font-size: 16px;
+
+            color: #243b53;
+        }
+
+
+        .summary-text p {
+
+            margin: 4px 0 0;
+
+            color: #8295aa;
+
+            font-size: 12px;
+        }
+
+
+        .booking-count {
+
+            padding: 9px 15px;
+
+            border-radius: 20px;
+
+            background: #e9fbf7;
+
+            color: #0fa88e;
+
+            font-size: 12px;
+
+            font-weight: 700;
+        }
+
+
+        /* ================================
+           TABLE CARD
+        ================================= */
+
+        .table-card {
+
+            background: white;
+
+            border-radius: 18px;
+
+            border: 1px solid #e1edf8;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 12px 35px
+                rgba(40,100,160,0.09);
+        }
+
+
+        .table-header {
+
+            padding: 22px 25px;
+
+            border-bottom: 1px solid #edf2f7;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+
+        .table-header h3 {
+
+            margin: 0;
+
+            font-size: 18px;
+
+            color: #243b53;
+        }
+
+
+        .table-header span {
+
+            color: #8a9cb1;
+
+            font-size: 12px;
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+
+        thead {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1677ff,
+                    #328fff
+                );
+        }
+
+
+        th {
+
+            padding: 16px 18px;
+
+            text-align: left;
+
+            color: white;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            letter-spacing: 0.3px;
+        }
+
+
+        td {
+
+            padding: 17px 18px;
+
+            border-bottom: 1px solid #edf2f7;
+
+            color: #435872;
+
+            font-size: 13px;
+        }
+
+
+        tbody tr {
+
+            transition: 0.2s;
+        }
+
+
+        tbody tr:hover {
+
+            background: #f7fbff;
+        }
+
+
+        tbody tr:last-child td {
+
+            border-bottom: none;
+        }
+
+
+        .booking-id {
+
+            color: #1677ff;
+
+            font-weight: 700;
+        }
+
+
+        .passenger {
+
+            font-weight: 600;
+
+            color: #263c57;
+        }
+
+
+        .route {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            font-weight: 500;
+        }
+
+
+        .arrow {
+
+            color: #1677ff;
+
+            font-weight: bold;
+        }
+
+
+        /* ================================
+           STATUS
+        ================================= */
+
+        .status {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            padding: 7px 12px;
+
+            border-radius: 20px;
+
+            background: #e9fbf7;
+
+            color: #0eaa8e;
+
+            font-size: 11px;
+
+            font-weight: 700;
+        }
+
+
+        .status-dot {
+
+            width: 7px;
+
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #18c6a5;
+        }
+
+
+        /* ================================
+           DOWNLOAD BUTTON
+        ================================= */
+
+        .download-btn {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            padding: 9px 14px;
+
+            border-radius: 8px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1677ff,
+                    #399aff
+                );
+
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            box-shadow:
+                0 5px 12px
+                rgba(22,119,255,0.18);
+
+            transition: 0.25s;
+        }
+
+
+        .download-btn:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 18px
+                rgba(22,119,255,0.28);
+        }
+
+
+        /* ================================
+           EMPTY STATE
+        ================================= */
+
+        .empty-state {
+
+            text-align: center;
+
+            padding: 55px 20px;
+
+            color: #8193aa;
+        }
+
+
+        .empty-icon {
+
+            font-size: 42px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .empty-state h3 {
+
+            color: #344b66;
+
+            margin: 0 0 7px;
+        }
+
+
+        /* ================================
+           MOBILE
+        ================================= */
+
+        @media(max-width: 850px) {
+
+            .navbar {
+
+                padding: 0 20px;
+            }
+
+            .nav-links {
+
+                display: none;
+            }
+
+            .page-container {
+
+                width: 92%;
+
+                padding-top: 35px;
+            }
+
+            .page-title {
+
+                font-size: 28px;
+            }
+
+            .table-card {
+
+                overflow-x: auto;
+            }
+
+            table {
+
+                min-width: 750px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================================
+     NAVBAR
+================================ -->
+
+<div class="navbar">
+
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            ✈
+        </div>
+
+        AIR<span>LINK</span>
+
+    </div>
+
+
+    <div class="nav-links">
+
+        <a href="/home">
+            Home
+        </a>
+
+        <a href="/booking-status"
+           class="active">
+            Status
+        </a>
+
+        <a href="/history">
+            History
+        </a>
+
+        <a href="/support">
+            Support
+        </a>
+
+        {% if session.user %}
+            <a href="/logout" style="color: #e11d48;">
+                Logout
+            </a>
+        {% else %}
+            <a href="/login">
+                Login
+            </a>
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+
+<!-- ================================
+     MAIN
+================================ -->
+
+<div class="page-container">
+
+
+    <div class="page-badge">
+        ✈ BOOKING MANAGEMENT
+    </div>
+
+
+    <h1 class="page-title">
+        Booking Status
+    </h1>
+
+
+    <p class="page-subtitle">
+        Track your current flight bookings and download your tickets.
+    </p>
+
+
+
+    <!-- SUMMARY -->
+
+    <div class="summary-card">
+
+
+        <div class="summary-left">
+
+
+            <div class="summary-icon">
+                📋
+            </div>
+
+
+            <div class="summary-text">
+
+                <h3>
+                    Current Bookings
+                </h3>
+
+                <p>
+                    View the latest status of your reservations
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="booking-count">
+            ● Active Bookings
+        </div>
+
+
+    </div>
+
+
+
+    <!-- TABLE -->
+
+    <div class="table-card">
+
+
+        <div class="table-header">
+
+            <h3>
+                Your Reservations
+            </h3>
+
+            <span>
+                AIRLINK Flight Management
+            </span>
+
+        </div>
+
+
+        {% if bookings %}
+
+
+        <table>
+
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Booking ID
+                    </th>
+
+                    <th>
+                        Passenger
+                    </th>
+
+                    <th>
+                        From
+                    </th>
+
+                    <th>
+                        To
+                    </th>
+
+                    <th>
+                        Status
+                    </th>
+
+                    <th>
+                        Ticket
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+
+                {% for booking in bookings %}
+                <tr>
+
+                    <td>
+                        <span class="booking-id">
+                            {{ booking.booking_id }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <span class="passenger">
+                            {{ booking.passenger or booking.passenger_name or 'N/A' }}
+                        </span>
+                    </td>
+
+                    <td>
+                        {{ booking.source }} → {{ booking.destination }}
+                    </td>
+
+                    <td>
+                        ₹ {{ booking.price }}
+                    </td>
+
+                    <td>
+                        {% if booking.booking_status == 'CANCELLED' %}
+                        <span class="status" style="background:#ffe4e6; color:#e11d48; border:1px solid #fecdd3;">
+                            <span class="status-dot" style="background:#e11d48;"></span>
+                            CANCELLED
+                        </span>
+                        {% else %}
+                        <span class="status">
+                            <span class="status-dot"></span>
+                            CONFIRMED
+                        </span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <a href="/download-ticket/{{ booking.booking_id }}" class="download-btn">
+                                ↓ Ticket PDF
+                            </a>
+
+                            {% if booking.booking_status != 'CANCELLED' %}
+                            <button onclick="openCancelModal('{{ booking.booking_id }}', '{{ booking.source }}', '{{ booking.destination }}', '{{ booking.date }}', '{{ booking.price }}')"
+                                    style="padding:6px 12px; background:#fff1f2; color:#e11d48; border:1px solid #fecdd3; border-radius:6px; font-weight:600; cursor:pointer; font-size:12px;">
+                                ✕ Cancel
+                            </button>
+                            {% endif %}
+                        </div>
+                    </td>
+
+                </tr>
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <div class="empty-state">
+            <div class="empty-icon">
+                ✈️
+            </div>
+            <h3>
+                No Current Bookings
+            </h3>
+            <p>
+                You don't have any active flight bookings yet.
+            </p>
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+<!-- CANCELLATION CONFIRMATION MODAL -->
+<div id="cancellationModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(15,23,42,0.6); backdrop-filter:blur(4px); align-items:center; justify-content:center; z-index:9999;">
+    <div style="background:white; width:480px; max-width:92%; border-radius:20px; padding:28px; box-shadow:0 20px 50px rgba(0,0,0,0.2); border:1px solid #e2e8f0; font-family:'Segoe UI',sans-serif;">
+        <div style="display:flex; align-items:center; gap:14px; position:relative; margin-bottom:20px;">
+            <div style="width:44px; height:44px; background:#fff1f2; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:22px;">⚠️</div>
+            <div>
+                <h2 style="margin:0; font-size:20px; color:#0f172a;">Cancel Flight Ticket?</h2>
+                <p style="margin:3px 0 0; font-size:13px; color:#64748b;">Review breakdown before confirming cancellation.</p>
+            </div>
+            <button onclick="closeCancelModal()" style="position:absolute; right:0; top:0; background:none; border:none; font-size:24px; color:#94a3b8; cursor:pointer;">&times;</button>
+        </div>
+
+        <div>
+            <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:14px 18px; margin-bottom:18px;">
+                <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:8px;">
+                    <span style="color:#64748b;">Booking ID:</span>
+                    <strong id="modalBookingId" style="color:#1e293b;">-</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:8px;">
+                    <span style="color:#64748b;">Flight:</span>
+                    <strong id="modalFlightRoute" style="color:#1e293b;">-</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:13px;">
+                    <span style="color:#64748b;">Travel Date:</span>
+                    <strong id="modalTravelDate" style="color:#1e293b;">-</strong>
+                </div>
+            </div>
+
+            <div style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:12px; padding:16px; margin-bottom:18px;">
+                <div style="display:flex; justify-content:space-between; font-size:14px; color:#334155; margin-bottom:8px;">
+                    <span>Original Fare</span>
+                    <strong id="modalOriginalFare">₹ 0</strong>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:14px; color:#334155; margin-bottom:8px;">
+                    <span>Cancellation Fee (10% / min ₹500)</span>
+                    <strong id="modalFee" style="color:#e11d48;">- ₹ 0</strong>
+                </div>
+                <div style="height:1px; background:#cbd5e1; margin:10px 0;"></div>
+                <div style="display:flex; justify-content:space-between; font-size:15px; font-weight:700; color:#0369a1;">
+                    <span>Estimated Refund</span>
+                    <strong id="modalRefund">₹ 0</strong>
+                </div>
+            </div>
+
+            <div style="background:#fffbebfb; border:1px solid #fef3c7; color:#92400e; font-size:12px; padding:10px 14px; border-radius:8px; display:flex; gap:8px; align-items:center; margin-bottom:18px;">
+                <span>ℹ️ Note: This application uses <strong>SIMULATED</strong> refunds. No real money is moved.</span>
+            </div>
+
+            <div style="margin-bottom:18px;">
+                <label style="display:block; font-size:12px; font-weight:600; color:#475569; margin-bottom:6px;">Reason for Cancellation</label>
+                <select id="cancelReason" style="width:100%; padding:10px; border-radius:8px; border:1px solid #cbd5e1; font-size:13px; background:white;">
+                    <option value="Change of travel plans">Change of travel plans</option>
+                    <option value="Personal emergency">Personal emergency</option>
+                    <option value="Schedule conflict">Schedule conflict</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+        </div>
+
+        <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:24px;">
+            <button onclick="closeCancelModal()" style="padding:11px 20px; border-radius:10px; font-weight:600; font-size:13px; border:none; cursor:pointer; background:#f1f5f9; color:#475569;">Go Back</button>
+            <button id="confirmCancelBtn" onclick="submitCancellation()" style="padding:11px 20px; border-radius:10px; font-weight:600; font-size:13px; border:none; cursor:pointer; background:#e11d48; color:white;">Confirm Cancellation</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentCancelBookingId = null;
+
+function openCancelModal(bookingId, source, destination, date, price) {
+    currentCancelBookingId = bookingId;
+    document.getElementById("modalBookingId").innerText = bookingId;
+    document.getElementById("modalFlightRoute").innerText = source + " → " + destination;
+    document.getElementById("modalTravelDate").innerText = date || "N/A";
+
+    fetch("/booking/" + bookingId)
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "success") {
+                const b = data.booking;
+                document.getElementById("modalOriginalFare").innerText = "₹ " + b.price;
+                document.getElementById("modalFee").innerText = "- ₹ " + b.cancellation_fee;
+                document.getElementById("modalRefund").innerText = "₹ " + b.refund_amount;
+                document.getElementById("cancellationModal").style.display = "flex";
+            } else {
+                alert(data.message || "Unable to fetch booking details");
+            }
+        })
+        .catch(err => {
+            const p = parseFloat(price) || 0;
+            const fee = Math.min(p, Math.max(500, Math.round(p * 0.10)));
+            const refund = Math.max(0, p - fee);
+            document.getElementById("modalOriginalFare").innerText = "₹ " + p;
+            document.getElementById("modalFee").innerText = "- ₹ " + fee;
+            document.getElementById("modalRefund").innerText = "₹ " + refund;
+            document.getElementById("cancellationModal").style.display = "flex";
+        });
+}
+
+function closeCancelModal() {
+    document.getElementById("cancellationModal").style.display = "none";
+    currentCancelBookingId = null;
+}
+
+function submitCancellation() {
+    if (!currentCancelBookingId) return;
+
+    const btn = document.getElementById("confirmCancelBtn");
+    btn.disabled = true;
+    btn.innerText = "Processing...";
+
+    const reason = document.getElementById("cancelReason").value;
+
+    fetch("/booking/" + currentCancelBookingId + "/cancel", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reason: reason })
+    })
+    .then(res => res.json())
+    .then(data => {
+        btn.disabled = false;
+        btn.innerText = "Confirm Cancellation";
+        closeCancelModal();
+
+        if (data.status === "success") {
+            alert(data.message);
+            window.location.reload();
+        } else {
+            alert("Cancellation Error: " + data.message);
+        }
+    })
+    .catch(err => {
+        btn.disabled = false;
+        btn.innerText = "Confirm Cancellation";
+        alert("An error occurred while processing cancellation.");
+    });
+}
+</script>
+
+</body>
+
+</html>

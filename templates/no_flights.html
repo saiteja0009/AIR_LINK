@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>No Flights Available</title>
+
+<style>
+
+body{
+
+font-family:Arial;
+background:#0f2027;
+color:white;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+height:100vh;
+
+}
+
+.box{
+
+background:#1e2a38;
+
+padding:40px;
+
+border-radius:12px;
+
+text-align:center;
+
+box-shadow:0 10px 25px rgba(0,0,0,0.5);
+
+}
+
+button{
+
+margin-top:20px;
+
+padding:10px 20px;
+
+background:#1abc9c;
+
+border:none;
+
+color:white;
+
+border-radius:6px;
+
+cursor:pointer;
+
+}
+
+button:hover{
+
+background:#16a085;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>✈ No Flights Available</h2>
+
+<p>
+No direct flights found from
+<b>{{source}}</b> → <b>{{destination}}</b>
+</p>
+
+<button onclick="window.location.href='/'">
+Search Again
+</button>
+
+</div>
+
+</body>
+</html>

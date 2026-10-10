@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIRLINK | My Travel Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #f8fcff, #eef7ff, #e8f4ff);
+            color: #172b4d; min-height: 100vh;
+        }
+        .navbar {
+            height: 72px; display: flex; justify-content: space-between; align-items: center;
+            padding: 0 55px; background: rgba(255,255,255,0.97);
+            border-bottom: 1px solid #e3edf7; box-shadow: 0 3px 15px rgba(40,90,140,0.08);
+        }
+        .logo { font-size: 25px; font-weight: 800; color: #1769e0; }
+        .logo span { color: #11bfa5; }
+        .nav-links { display: flex; gap: 15px; }
+        .nav-links a { text-decoration: none; color: #475569; font-weight: 600; font-size: 13px; padding: 8px 12px; border-radius: 8px; }
+        .nav-links a:hover, .nav-links a.active { color: #1473ff; background: #e0f2fe; }
+
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        .header { margin-bottom: 30px; }
+        .header h1 { font-size: 28px; margin: 0 0 8px; color: #0f172a; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 18px; margin-bottom: 30px; }
+        .stat-card { background: white; border-radius: 16px; padding: 20px; border: 1px solid #e2e8f0; box-shadow: 0 6px 20px rgba(0,0,0,0.04); }
+        .stat-label { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; }
+        .stat-val { font-size: 24px; font-weight: 800; color: #1473ff; margin-top: 6px; }
+
+        .charts-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; }
+        .chart-card { background: white; border-radius: 18px; padding: 25px; border: 1px solid #e2e8f0; box-shadow: 0 8px 25px rgba(0,0,0,0.04); }
+        .chart-card h3 { margin: 0 0 20px; font-size: 16px; color: #0f172a; }
+        .chart-box { position: relative; height: 260px; }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="logo">✈ AIR<span>LINK</span></div>
+        <div class="nav-links">
+            <a href="/home">Home</a>
+            <a href="/flights">Search Flights</a>
+            <a href="/price-intelligence">AI Intelligence</a>
+            <a href="/history">My Bookings</a>
+            <a href="/price-alerts">Price Alerts</a>
+            <a href="/saved-flights">Saved Flights</a>
+            <a href="/my-analytics" class="active">Travel Analytics</a>
+            <a href="/ai-assistant">AI Assistant</a>
+            <a href="/logout" style="color:#e11d48;">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>📊 My Travel Analytics</h1>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Trips</div>
+                <div class="stat-val" id="statTrips">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Spending</div>
+                <div class="stat-val" id="statSpending">₹ 0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Confirmed Trips</div>
+                <div class="stat-val" id="statConfirmed" style="color:#16a34a;">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Cancelled Trips</div>
+                <div class="stat-val" id="statCancelled" style="color:#e11d48;">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Favorite Airline</div>
+                <div class="stat-val" id="statFavAirline" style="font-size:18px;">-</div>
+            </div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3>✈ Airline Preference Distribution</h3>
+                <div class="chart-box">
+                    <canvas id="airlineChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-card">
+                <h3>📋 Booking Status Ratio</h3>
+                <div class="chart-box">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch("/api/customer-analytics")
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("statTrips").innerText = data.total_trips;
+                document.getElementById("statSpending").innerText = "₹ " + data.total_spending;
+                document.getElementById("statConfirmed").innerText = data.confirmed_trips;
+                document.getElementById("statCancelled").innerText = data.cancelled_trips;
+                document.getElementById("statFavAirline").innerText = data.fav_airline;
+
+                // Render Airline Chart
+                new Chart(document.getElementById('airlineChart').getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: data.airline_labels.length > 0 ? data.airline_labels : ['IndiGo', 'Air India', 'Vistara'],
+                        datasets: [{
+                            label: 'Bookings',
+                            data: data.airline_values.length > 0 ? data.airline_values : [3, 1, 2],
+                            backgroundColor: '#1473ff',
+                            borderRadius: 8
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+                });
+
+                // Render Status Chart
+                new Chart(document.getElementById('statusChart').getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.status_labels,
+                        datasets: [{
+                            data: data.status_values[0] === 0 && data.status_values[1] === 0 ? [1, 0] : data.status_values,
+                            backgroundColor: ['#16a34a', '#e11d48']
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

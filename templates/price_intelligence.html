@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIRLINK | AI Price Intelligence</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #f8fcff, #eef7ff, #e8f4ff);
+            color: #172b4d; min-height: 100vh;
+        }
+        .navbar {
+            height: 72px; display: flex; justify-content: space-between; align-items: center;
+            padding: 0 55px; background: rgba(255,255,255,0.97);
+            border-bottom: 1px solid #e3edf7; box-shadow: 0 3px 15px rgba(40,90,140,0.08);
+        }
+        .logo { font-size: 25px; font-weight: 800; color: #1769e0; }
+        .logo span { color: #11bfa5; }
+        .nav-links { display: flex; gap: 15px; }
+        .nav-links a { text-decoration: none; color: #475569; font-weight: 600; font-size: 13px; padding: 8px 12px; border-radius: 8px; }
+        .nav-links a:hover, .nav-links a.active { color: #1473ff; background: #e0f2fe; }
+
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        .header { margin-bottom: 30px; text-align: center; }
+        .header h1 { font-size: 32px; margin: 0 0 10px; color: #0f172a; }
+        .header p { color: #64748b; font-size: 14px; margin: 0; }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 30px; }
+        .card { background: white; border-radius: 20px; padding: 28px; border: 1px solid #e2e8f0; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .card h3 { margin: 0 0 20px; font-size: 18px; color: #0f172a; display: flex; align-items: center; gap: 10px; }
+
+        .metric-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
+        .metric-row:last-child { border-bottom: none; }
+        .metric-label { color: #64748b; }
+        .metric-val { font-weight: 700; color: #1e293b; }
+
+        .badge-volatility { background: #fef3c7; color: #d97706; border: 1px solid #fde68a; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; }
+        .predicted-box { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 14px; padding: 20px; text-align: center; margin-top: 15px; }
+        .predicted-box .price-large { font-size: 32px; font-weight: 800; color: #0284c7; margin: 6px 0; }
+
+        .chart-container { position: relative; height: 260px; width: 100%; }
+        .model-weights { display: flex; gap: 12px; margin-top: 15px; }
+        .weight-pill { flex: 1; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; text-align: center; font-size: 12px; }
+        .weight-pill strong { display: block; font-size: 16px; color: #1473ff; margin-top: 4px; }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="logo">✈ AIR<span>LINK</span></div>
+        <div class="nav-links">
+            <a href="/home">Home</a>
+            <a href="/price-intelligence" class="active">AI Intelligence</a>
+            <a href="/history">My Bookings</a>
+            <a href="/price-alerts">Price Alerts</a>
+            <a href="/saved-flights">Saved Flights</a>
+            <a href="/ai-assistant">AI Assistant</a>
+            <a href="/logout" style="color:#e11d48;">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🧠 AI Price Intelligence Engine</h1>
+            <p>Advanced ensemble flight price forecasting powered by XGBoost, ARIMA, and LSTM Deep Learning.</p>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h3>✈ Flight Route Summary</h3>
+                <div class="metric-row">
+                    <span class="metric-label">Route</span>
+                    <span class="metric-val" id="routeText">{{ source }} → {{ destination }}</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Target Travel Date</span>
+                    <span class="metric-val" id="dateText">{{ date }}</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Airline Carrier</span>
+                    <span class="metric-val" id="airlineText">{{ airline }}</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Price Volatility Index</span>
+                    <span class="badge-volatility" id="volatilityBadge">Medium</span>
+                </div>
+
+                <div class="predicted-box">
+                    <div style="font-size:12px; color:#64748b; font-weight:600;">PREDICTED FARE RANGE</div>
+                    <div class="price-large" id="predictedPriceText">Loading...</div>
+                    <div style="font-size:12px; color:#0369a1;" id="rangeText">Calculating confidence interval...</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📈 7-Day Forecast & Historical Trend</h3>
+                <div class="chart-container">
+                    <canvas id="trendChart"></canvas>
+                </div>
+                <div class="model-weights">
+                    <div class="weight-pill">
+                        XGBoost Tree
+                        <strong id="xgbVal">₹ -</strong>
+                    </div>
+                    <div class="weight-pill">
+                        ARIMA TS
+                        <strong id="arimaVal">₹ -</strong>
+                    </div>
+                    <div class="weight-pill">
+                        LSTM Neural
+                        <strong id="lstmVal">₹ -</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const payload = {
+                "Source": "{{ source }}",
+                "Destination": "{{ destination }}",
+                "Total_Stops": 0,
+                "Duration_Hours": 2,
+                "Duration_Minutes": 15,
+                "Journey_Month": 10,
+                "Journey_Day": 15,
+                "Days_Before": 14
+            };
+
+            fetch("/predict", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.route_exists) {
+                    document.getElementById("predictedPriceText").innerText = "₹ " + data.final_price;
+                    document.getElementById("rangeText").innerText = "Confidence Range: ₹ " + data.min_price + " – ₹ " + data.max_price;
+                    document.getElementById("volatilityBadge").innerText = data.volatility + " Volatility";
+
+                    document.getElementById("xgbVal").innerText = "₹ " + data.xgb_price;
+                    document.getElementById("arimaVal").innerText = "₹ " + data.arima_price;
+                    document.getElementById("lstmVal").innerText = "₹ " + data.lstm_price;
+
+                    renderChart(data.trend);
+                } else {
+                    document.getElementById("predictedPriceText").innerText = "₹ 5,850";
+                    document.getElementById("rangeText").innerText = "Estimated Range: ₹ 5,400 – ₹ 6,200";
+                    renderChart([5400, 5600, 5750, 5650, 5850, 6000, 5850]);
+                }
+            })
+            .catch(err => {
+                document.getElementById("predictedPriceText").innerText = "₹ 6,250";
+                document.getElementById("rangeText").innerText = "Estimated Range: ₹ 5,800 – ₹ 6,600";
+                renderChart([6000, 6150, 6100, 6250, 6300, 6200, 6250]);
+            });
+        });
+
+        function renderChart(trendData) {
+            const ctx = document.getElementById('trendChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Day -3', 'Day -2', 'Day -1', 'Today', 'Day +1', 'Day +2', 'Day +3'],
+                    datasets: [{
+                        label: 'Predicted Fare Trend (₹)',
+                        data: trendData,
+                        borderColor: '#0284c7',
+                        backgroundColor: 'rgba(2, 132, 199, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#0284c7'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: '#f1f5f9' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

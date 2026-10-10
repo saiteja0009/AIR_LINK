@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIRLINK Admin | User Management</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #f7fbff, #eef7ff, #e8f4ff);
+            color: #172b4d; min-height: 100vh;
+        }
+        .admin-navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 55px; background: rgba(255,255,255,0.96);
+            border-bottom: 1px solid #e1eaf4; box-shadow: 0 3px 15px rgba(30,80,130,0.08);
+        }
+        .admin-logo { font-size: 25px; font-weight: 800; color: #1769e0; }
+        .admin-logo span { color: #11bfa5; }
+        .admin-nav-links { display: flex; gap: 12px; }
+        .admin-nav-links a {
+            text-decoration: none; padding: 9px 14px; border-radius: 9px;
+            color: #536a85; font-size: 12px; font-weight: 600;
+        }
+        .admin-nav-links a:hover, .admin-nav-links a.active { color: #1677ff; background: #eef6ff; }
+
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .header h1 { font-size: 28px; margin: 0; color: #0f172a; }
+
+        .card { background: white; border-radius: 16px; padding: 25px; border: 1px solid #dfebf6; box-shadow: 0 8px 25px rgba(30,80,130,0.07); }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+        th { padding: 12px; background: #f1f5f9; color: #475569; border-bottom: 2px solid #e2e8f0; }
+        td { padding: 12px; border-bottom: 1px solid #f1f5f9; }
+
+        .badge-active { background: #dcfce7; color: #15803d; padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 11px; }
+        .badge-inactive { background: #ffe4e6; color: #e11d48; padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 11px; }
+        .btn-toggle { padding: 6px 12px; border-radius: 6px; border: 1px solid #cbd5e1; background: #f8fafc; font-weight: 600; cursor: pointer; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <div class="admin-navbar">
+        <div class="admin-logo">✈ AIR<span>LINK Admin</span></div>
+        <div class="admin-nav-links">
+            <a href="/admin">Dashboard</a>
+            <a href="/admin/users" class="active">Users</a>
+            <a href="/admin/flights">Flights</a>
+            <a href="/admin/bookings">Bookings</a>
+            <a href="/admin/cancellations">Cancellations</a>
+            <a href="/admin/revenue">Revenue</a>
+            <a href="/admin/analytics">Analytics</a>
+            <a href="/admin/ml-analytics">ML Analytics</a>
+            <a href="/admin/reports">Reports</a>
+            <a href="/admin/settings">Settings</a>
+            <a href="/logout" style="color:#e11d48;">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>👥 User Account Management</h1>
+        </div>
+
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users %}
+                    <tr>
+                        <td>#{{ u.id }}</td>
+                        <td style="font-weight:700; color:#0f172a;">{{ u.username }}</td>
+                        <td>{{ u.email or 'N/A' }}</td>
+                        <td><span style="font-weight:600; color:#0284c7;">{{ u.role or 'customer' }}</span></td>
+                        <td>
+                            {% if u.status == 'inactive' %}
+                                <span class="badge-inactive">Inactive</span>
+                            {% else %}
+                                <span class="badge-active">Active</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if u.username != 'admin' %}
+                            <button class="btn-toggle" onclick="toggleUser({{ u.id }})">Toggle Active/Inactive</button>
+                            {% else %}
+                            <span style="color:#94a3b8; font-size:12px;">System Admin</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function toggleUser(id) {
+            fetch(`/api/admin/users/${id}/toggle`, { method: "POST" })
+            .then(res => res.json())
+            .then(data => window.location.reload());
+        }
+    </script>
+</body>
+</html>

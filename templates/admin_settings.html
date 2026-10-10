@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIRLINK Admin | Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            color: #0f172a;
+            min-height: 100vh;
+        }
+
+        .admin-navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 45px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid #cbd5e1;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .admin-logo {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0284c7;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .admin-logo span { color: #0d9488; }
+
+        .admin-nav-links {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .admin-nav-links a {
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            color: #475569;
+            font-size: 12.5px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .admin-nav-links a:hover, .admin-nav-links a.active {
+            color: #0284c7;
+            background: #e0f2fe;
+        }
+
+        .admin-nav-links a.logout-link {
+            color: #e11d48;
+            background: #ffe4e6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 35px auto;
+            padding: 0 24px;
+        }
+
+        .header {
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            font-weight: 800;
+            margin: 0 0 6px;
+            color: #0f172a;
+        }
+
+        .header p {
+            margin: 0;
+            color: #64748b;
+            font-size: 13.5px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            margin-bottom: 24px;
+        }
+
+        .card h2 {
+            font-size: 17px;
+            font-weight: 700;
+            margin: 0 0 18px;
+            color: #0f172a;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #475569;
+            text-transform: uppercase;
+        }
+
+        .form-group input {
+            width: 100%;
+            height: 44px;
+            padding: 0 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 13.5px;
+            outline: none;
+        }
+
+        .save-btn {
+            padding: 12px 24px;
+            background: #0284c7;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .save-btn:hover {
+            background: #0369a1;
+        }
+
+        .alert-success {
+            padding: 12px 16px;
+            border-radius: 10px;
+            background: #dcfce7;
+            border: 1px solid #bbf7d0;
+            color: #15803d;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="admin-navbar">
+        <a href="/admin" class="admin-logo">✈ AIR<span>LINK ADMIN</span></a>
+        <div class="admin-nav-links">
+            <a href="/admin">Dashboard</a>
+            <a href="/admin/users">Users</a>
+            <a href="/admin/flights">Flights</a>
+            <a href="/admin/bookings">Bookings</a>
+            <a href="/admin/cancellations">Cancellations</a>
+            <a href="/admin/revenue">Revenue</a>
+            <a href="/admin/analytics">Analytics</a>
+            <a href="/admin/ml-analytics">ML Analytics</a>
+            <a href="/admin/reports">Reports</a>
+            <a href="/admin/settings" class="active">Settings</a>
+            <a href="/logout" class="logout-link">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>⚙️ System Policy & Configuration Settings</h1>
+            <p>Manage platform cancellation parameters, ML model ensemble ratios, and admin credentials</p>
+        </div>
+
+        {% if message %}
+            <div class="alert-success">✅ {{ message }}</div>
+        {% endif %}
+
+        <!-- CANCELLATION POLICY FORM -->
+        <div class="card">
+            <h2>🛡️ Cancellation Policy Rules</h2>
+            <form method="POST" action="/admin/settings">
+                <input type="hidden" name="action" value="cancellation_policy">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Cancellation Fee Percentage (%)</label>
+                        <input type="number" name="fee_percent" value="{{ fee_percent|default(10) }}" min="1" max="50" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Minimum Flat Fee (₹)</label>
+                        <input type="number" name="flat_fee" value="{{ flat_fee|default(500) }}" min="100" required>
+                    </div>
+                </div>
+                <button type="submit" class="save-btn">Save Cancellation Rules</button>
+            </form>
+        </div>
+
+        <!-- ML MODEL ENSEMBLE WEIGHTS -->
+        <div class="card">
+            <h2>🧪 ML Prediction Ensemble Weights</h2>
+            <form method="POST" action="/admin/settings">
+                <input type="hidden" name="action" value="ml_weights">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>XGBoost Regressor Weight</label>
+                        <input type="text" name="xgb_weight" value="0.50 (50%)" readonly style="background:#f1f5f9;">
+                    </div>
+                    <div class="form-group">
+                        <label>ARIMA Time-Series Weight</label>
+                        <input type="text" name="arima_weight" value="0.30 (30%)" readonly style="background:#f1f5f9;">
+                    </div>
+                    <div class="form-group">
+                        <label>LSTM Neural Network Weight</label>
+                        <input type="text" name="lstm_weight" value="0.20 (20%)" readonly style="background:#f1f5f9;">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

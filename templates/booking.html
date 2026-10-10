@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AIRLINK | Secure Payment</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        /* =========================================
+           PAGE
+        ========================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(
+                135deg,
+                #f8fbff,
+                #eaf5ff,
+                #f8fbff
+            );
+            color: #172b4d;
+            min-height: 100vh;
+        }
+
+
+        /* =========================================
+           NAVBAR
+        ========================================= */
+
+        .navbar {
+            height: 72px;
+            background: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 48px;
+
+            border-bottom: 1px solid #e5edf7;
+
+            box-shadow:
+                0 3px 15px rgba(30, 80, 130, 0.06);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: #172b4d;
+        }
+
+        .logo span {
+            color: #1473ff;
+        }
+
+
+        /* =========================================
+           MAIN
+        ========================================= */
+
+        .booking-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+
+            padding: 45px 20px 70px;
+        }
+
+
+        /* =========================================
+           BOOKING CARD
+        ========================================= */
+
+        .booking-box {
+            width: 520px;
+            max-width: 100%;
+
+            background: white;
+
+            padding: 35px 42px 38px;
+
+            border-radius: 22px;
+
+            border: 1px solid #e1ebf5;
+
+            box-shadow:
+                0 18px 50px rgba(44, 90, 130, 0.12);
+
+            text-align: center;
+        }
+
+
+        /* =========================================
+           HEADER
+        ========================================= */
+
+        .booking-header {
+            margin-bottom: 25px;
+        }
+
+        .booking-icon {
+            width: 52px;
+            height: 52px;
+
+            margin: 0 auto 12px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 15px;
+
+            background: #eaf3ff;
+
+            color: #1473ff;
+
+            font-size: 25px;
+        }
+
+        .booking-header h2 {
+            margin: 0;
+
+            font-size: 25px;
+            color: #172b4d;
+        }
+
+        .booking-header p {
+            margin: 7px 0 0;
+
+            color: #7b8da5;
+            font-size: 12px;
+        }
+
+
+        /* =========================================
+           FLIGHT SUMMARY
+        ========================================= */
+
+        .summary-box {
+            background: #f7faff;
+
+            border: 1px solid #e3edf8;
+
+            border-radius: 15px;
+
+            padding: 18px;
+
+            margin-bottom: 25px;
+        }
+
+        .route-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 12px;
+
+            margin-bottom: 16px;
+        }
+
+        .airport {
+            text-align: left;
+        }
+
+        .airport small {
+            display: block;
+
+            color: #8999ae;
+
+            font-size: 9px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 4px;
+        }
+
+        .airport strong {
+            font-size: 16px;
+            color: #172b4d;
+        }
+
+        .route-arrow {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #eaf3ff;
+
+            color: #1473ff;
+
+            font-size: 18px;
+        }
+
+        .summary-details {
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 10px;
+
+            padding-top: 15px;
+
+            border-top: 1px solid #e4edf7;
+        }
+
+        .summary-item {
+            text-align: center;
+        }
+
+        .summary-item small {
+            display: block;
+
+            color: #8999ae;
+
+            font-size: 9px;
+
+            margin-bottom: 5px;
+        }
+
+        .summary-item strong {
+            font-size: 12px;
+
+            color: #243b5a;
+        }
+
+
+        /* =========================================
+           PRICE
+        ========================================= */
+
+        .fare-box {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 15px 17px;
+
+            margin-bottom: 24px;
+
+            background: #f0f7ff;
+
+            border-radius: 12px;
+
+            border: 1px solid #dceaff;
+        }
+
+        .fare-label {
+            text-align: left;
+
+            color: #7185a3;
+
+            font-size: 11px;
+        }
+
+        .fare-price {
+            color: #1473ff;
+
+            font-size: 22px;
+
+            font-weight: 800;
+        }
+
+        .payment-status {
+            color: #e79a00;
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================================
+           PASSENGER
+        ========================================= */
+
+        .section-title {
+            text-align: left;
+
+            font-size: 15px;
+
+            color: #172b4d;
+
+            margin: 22px 0 12px;
+
+            padding-bottom: 9px;
+
+            border-bottom: 1px solid #e6eef7;
+        }
+
+        .passenger-form {
+            display: flex;
+            flex-direction: column;
+
+            gap: 10px;
+        }
+
+        .passenger-form input {
+            width: 100%;
+
+            height: 45px;
+
+            padding: 0 13px;
+
+            border-radius: 9px;
+
+            border: 1px solid #d7e3ef;
+
+            background: #fbfdff;
+
+            color: #243b5a;
+
+            font-family: inherit;
+
+            font-size: 12px;
+
+            outline: none;
+        }
+
+        .passenger-form input:focus {
+            border-color: #1473ff;
+
+            box-shadow:
+                0 0 0 3px rgba(20, 115, 255, 0.08);
+        }
+
+        .passenger-form input::placeholder {
+            color: #8fa0b5;
+        }
+
+
+        /* =========================================
+           INFORMATION
+        ========================================= */
+
+        .travel-info {
+            margin-top: 17px;
+        }
+
+        .baggage,
+        .notice {
+            margin: 8px 0;
+
+            padding: 11px 13px;
+
+            border-radius: 9px;
+
+            font-size: 10px;
+
+            text-align: left;
+        }
+
+        .baggage {
+            background: #edfbf6;
+
+            border: 1px solid #c9f0df;
+
+            color: #12966a;
+        }
+
+        .notice {
+            background: #fff8e9;
+
+            border: 1px solid #f7dda5;
+
+            color: #b47700;
+        }
+
+
+        /* =========================================
+           PAYMENT
+        ========================================= */
+
+        .payment-section {
+            margin-top: 26px;
+
+            padding-top: 23px;
+
+            border-top: 1px solid #e2ebf4;
+        }
+
+        .payment-title {
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            text-align: left;
+        }
+
+        .payment-icon {
+            width: 42px;
+            height: 42px;
+
+            flex-shrink: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 12px;
+
+            background: #eaf3ff;
+
+            color: #1473ff;
+
+            font-size: 19px;
+
+            font-weight: 800;
+        }
+
+        .payment-title h3 {
+            margin: 0;
+
+            color: #172b4d;
+
+            font-size: 16px;
+        }
+
+        .payment-title p {
+            margin: 3px 0 0;
+
+            color: #8293a9;
+
+            font-size: 10px;
+        }
+
+
+        /* =========================================
+           QR
+        ========================================= */
+
+        .qr-wrapper {
+            width: 175px;
+            height: 175px;
+
+            margin: 18px auto 8px;
+
+            padding: 10px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: white;
+
+            border: 1px solid #dce6f1;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 8px 25px rgba(30, 80, 130, 0.08);
+        }
+
+        .qr-wrapper img {
+            width: 150px;
+            height: 150px;
+
+            object-fit: contain;
+
+            margin: 0;
+
+            padding: 0;
+        }
+
+        .payment-hint {
+            margin: 8px 0;
+
+            color: #8193aa;
+
+            font-size: 10px;
+        }
+
+        .payment-methods {
+            display: flex;
+
+            justify-content: center;
+
+            gap: 17px;
+
+            margin: 10px 0 18px;
+
+            color: #607795;
+
+            font-size: 10px;
+
+            font-weight: 700;
+        }
+
+
+        /* =========================================
+           CONFIRMATION MESSAGE
+        ========================================= */
+
+        .payment-confirm {
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            padding: 12px;
+
+            margin-bottom: 14px;
+
+            border-radius: 11px;
+
+            background: #f5f9ff;
+
+            border: 1px solid #dceaff;
+
+            text-align: left;
+        }
+
+        .payment-check {
+            width: 36px;
+            height: 36px;
+
+            flex-shrink: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #e6f9ef;
+
+            color: #16a765;
+
+            font-size: 17px;
+
+            font-weight: 800;
+        }
+
+        .payment-confirm-text h4 {
+            margin: 0 0 3px;
+
+            color: #172b4d;
+
+            font-size: 12px;
+        }
+
+        .payment-confirm-text p {
+            margin: 0;
+
+            color: #8091a8;
+
+            font-size: 9px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =========================================
+           BUTTON
+        ========================================= */
+
+        .pay-btn {
+            width: 100%;
+
+            height: 50px;
+
+            border: none;
+
+            border-radius: 11px;
+
+            background: linear-gradient(
+                135deg,
+                #1473ff,
+                #258cff
+            );
+
+            color: white;
+
+            font-family: inherit;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 8px 20px rgba(20, 115, 255, 0.22);
+
+            transition: 0.25s;
+        }
+
+        .pay-btn:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 12px 25px rgba(20, 115, 255, 0.30);
+        }
+
+
+        /* =========================================
+           SECURE NOTE
+        ========================================= */
+
+        .secure-note {
+            display: flex;
+
+            align-items: center;
+
+            gap: 9px;
+
+            margin-top: 12px;
+
+            padding: 10px 12px;
+
+            border-radius: 10px;
+
+            background: #edf6ff;
+
+            text-align: left;
+        }
+
+        .secure-icon {
+            width: 27px;
+            height: 27px;
+
+            flex-shrink: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 8px;
+
+            background: white;
+
+            font-size: 13px;
+        }
+
+        .secure-note b {
+            font-size: 9px;
+
+            color: #3973ad;
+        }
+
+        .secure-note span {
+            font-size: 8px;
+
+            color: #7d96b0;
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 600px) {
+
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .booking-container {
+                padding: 25px 12px 50px;
+            }
+
+            .booking-box {
+                padding: 25px 20px 30px;
+            }
+
+            .summary-details {
+                grid-template-columns: 1fr;
+            }
+
+            .route-row {
+                gap: 7px;
+            }
+
+            .payment-methods {
+                gap: 11px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================
+     NAVBAR
+========================================= -->
+
+<div class="navbar">
+
+    <div class="logo">
+        AIR<span>LINK</span>
+    </div>
+
+</div>
+
+
+
+<!-- =========================================
+     MAIN BOOKING
+========================================= -->
+
+<div class="booking-container">
+
+    <div class="booking-box">
+
+
+        <!-- HEADER -->
+
+        <div class="booking-header">
+
+            <div class="booking-icon">
+                ✈
+            </div>
+
+            <h2>Booking Summary</h2>
+
+            <p>
+                Review your flight details before payment
+            </p>
+
+        </div>
+
+
+
+        <!-- FLIGHT SUMMARY -->
+
+        <div class="summary-box">
+
+            <div class="route-row">
+
+                <div class="airport">
+
+                    <small>From</small>
+
+                    <strong>
+                        {{ source }}
+                    </strong>
+
+                </div>
+
+
+                <div class="route-arrow">
+                    →
+                </div>
+
+
+                <div class="airport" style="text-align:right;">
+
+                    <small>To</small>
+
+                    <strong>
+                        {{ destination }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="summary-details">
+
+                <div class="summary-item">
+
+                    <small>Airline</small>
+
+                    <strong>
+                        {{ airline }}
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <small>Travel Date</small>
+
+                    <strong>
+                        {{ date }}
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-item">
+
+                    <small>Status</small>
+
+                    <strong class="payment-status">
+                        Awaiting Payment
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- FARE -->
+
+        <div class="fare-box">
+
+            <div class="fare-label">
+                Total Fare
+            </div>
+
+            <div class="fare-price">
+                ₹ {{ price }}
+            </div>
+
+        </div>
+
+
+
+        <!-- PASSENGER -->
+
+        <h3 class="section-title">
+            Passenger Details
+        </h3>
+
+
+        <div class="passenger-form">
+
+            <input
+                type="text"
+                id="passengerName"
+                placeholder="Passenger Full Name"
+                required
+            >
+
+            <input
+                type="number"
+                id="age"
+                placeholder="Passenger Age"
+                required
+            >
+
+            <input
+                type="tel"
+                id="phone"
+                placeholder="Phone Number"
+            >
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Email Address"
+            >
+
+        </div>
+
+
+
+        <!-- TRAVEL INFORMATION -->
+
+        <div class="travel-info">
+
+            <p class="baggage">
+
+                🧳
+
+                <b>
+                    Baggage Allowance:
+                </b>
+
+                20kg Check-in + 7kg Cabin
+
+            </p>
+
+
+            <p class="notice">
+
+                ⚠
+
+                <b>
+                    Important Notice:
+                </b>
+
+                Please carry a valid government ID
+                at airport check-in.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- PAYMENT -->
+
+        <div class="payment-section">
+
+
+            <div class="payment-title">
+
+                <div class="payment-icon">
+                    ₹
+                </div>
+
+                <div>
+
+                    <h3>
+                        Complete Your Payment
+                    </h3>
+
+                    <p>
+                        Scan the QR code using your preferred UPI app
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- QR -->
+
+            <div class="qr-wrapper">
+
+                <img
+                    src="{{ url_for('static', filename='qr.png') }}"
+                    alt="Payment QR Code"
+                >
+
+            </div>
+
+
+            <div class="payment-hint">
+                Scan & pay securely using UPI
+            </div>
+
+
+            <div class="payment-methods">
+
+                <span>GPay</span>
+                <span>PhonePe</span>
+                <span>Paytm</span>
+                <span>BHIM</span>
+
+            </div>
+
+
+
+            <!-- CONFIRMATION -->
+
+            <div class="payment-confirm">
+
+                <div class="payment-check">
+                    ✓
+                </div>
+
+                <div class="payment-confirm-text">
+
+                    <h4>
+                        Payment Completed?
+                    </h4>
+
+                    <p>
+                        After completing the payment,
+                        confirm below to generate your booking.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- BUTTON -->
+
+            <button
+                class="pay-btn"
+                onclick="confirmPayment()"
+            >
+                ✓ Confirm Payment &amp; Book Flight →
+            </button>
+
+
+
+            <!-- SECURITY -->
+
+            <div class="secure-note">
+
+                <div class="secure-icon">
+                    🔒
+                </div>
+
+                <div>
+
+                    <b>
+                        Secure Payment
+                    </b>
+
+                    <br>
+
+                    <span>
+                        Your booking information is protected.
+                    </span>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================
+     JAVASCRIPT
+========================================= -->
+
+<script>
+
+function confirmPayment() {
+
+    const name =
+        document.getElementById("passengerName").value.trim();
+
+    if (!name) {
+
+        alert("Please enter passenger name");
+
+        return;
+    }
+
+
+    fetch("/save-booking", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+            passenger: name,
+
+            source: "{{ source }}",
+
+            destination: "{{ destination }}",
+
+            airline: "{{ airline }}",
+
+            price: "{{ price }}"
+
+        })
+
+    })
+
+    .then(res => res.json())
+
+    .then(data => {
+
+        alert(
+            "Payment Successful!\nBooking ID: "
+            + data.booking_id
+        );
+
+        window.location.href =
+            "/booking-status";
+
+    })
+
+    .catch(error => {
+
+        console.error(error);
+
+        alert(
+            "Something went wrong while saving the booking."
+        );
+
+    });
+
+}
+
+</script>
+
+
+</body>
+</html>

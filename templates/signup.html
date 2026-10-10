@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AIRLINK | Sign Up</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef8ff,
+                    #dff2ff
+                );
+
+            color: #172b4d;
+        }
+
+
+        /* NAVBAR */
+
+        .navbar {
+            height: 70px;
+
+            display: flex;
+            align-items: center;
+
+            padding: 0 50px;
+
+            background: #ffffff;
+
+            border-bottom:
+                1px solid #dceaf7;
+
+            box-shadow:
+                0 3px 15px rgba(40, 100, 150, 0.08);
+        }
+
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+
+            color: #1687d9;
+        }
+
+
+        .logo span {
+            color: #16b8a6;
+        }
+
+
+        /* SIGNUP PAGE */
+
+        .signup-page {
+
+            min-height:
+                calc(100vh - 70px);
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 40px 20px;
+
+            box-sizing: border-box;
+        }
+
+
+        .signup-card {
+
+            width: 360px;
+
+            background: #ffffff;
+
+            border-radius: 20px;
+
+            padding: 36px;
+
+            box-shadow:
+                0 15px 45px
+                rgba(40, 100, 150, 0.15);
+
+            border:
+                1px solid #dceaf7;
+
+            text-align: center;
+        }
+
+
+        .signup-icon {
+
+            width: 56px;
+            height: 56px;
+
+            margin:
+                0 auto 18px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 16px;
+
+            background: #e6f2ff;
+
+            font-size: 27px;
+        }
+
+
+        .signup-card h2 {
+
+            margin:
+                0 0 8px;
+
+            font-size: 25px;
+
+            color: #172b4d;
+        }
+
+
+        .signup-subtitle {
+
+            margin:
+                0 0 28px;
+
+            font-size: 13px;
+
+            color: #7890aa;
+        }
+
+
+        /* FORM */
+
+        .form-group {
+
+            text-align: left;
+
+            margin-bottom: 17px;
+        }
+
+
+        .form-group label {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            color: #5f7895;
+
+            text-transform: uppercase;
+        }
+
+
+        .form-group input {
+
+            box-sizing: border-box;
+
+            width: 100%;
+
+            height: 48px;
+
+            padding:
+                0 14px;
+
+            border:
+                1px solid #cddff0;
+
+            border-radius: 10px;
+
+            background: #f7fbff;
+
+            color: #172b4d;
+
+            outline: none;
+
+            font-size: 13px;
+        }
+
+
+        .form-group input:focus {
+
+            border-color:
+                #2388ff;
+
+            background: #ffffff;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(35, 136, 255, 0.10);
+        }
+
+
+        /* BUTTON */
+
+        .signup-btn {
+
+            width: 100%;
+
+            height: 48px;
+
+            margin-top: 8px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1687d9,
+                    #16b8a6
+                );
+
+            color: white;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 8px 20px
+                rgba(22, 135, 217, 0.22);
+
+            transition:
+                0.25s ease;
+        }
+
+
+        .signup-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 12px 25px
+                rgba(22, 135, 217, 0.30);
+        }
+
+
+        /* LOGIN LINK */
+
+        .login-link {
+
+            margin-top: 20px;
+
+            padding-top: 18px;
+
+            border-top:
+                1px solid #e5edf5;
+
+            font-size: 12px;
+
+            color: #7b8fa6;
+        }
+
+
+        .login-link a {
+
+            color: #1687d9;
+
+            font-weight: 700;
+
+            text-decoration: none;
+        }
+
+
+        .login-link a:hover {
+
+            text-decoration:
+                underline;
+        }
+
+
+        .secure-note {
+
+            margin-top: 18px;
+
+            font-size: 10px;
+
+            color: #8aa0b7;
+        }
+
+
+        /* MOBILE */
+
+        @media (max-width: 480px) {
+
+            .navbar {
+
+                padding:
+                    0 20px;
+            }
+
+
+            .signup-card {
+
+                width: 100%;
+
+                max-width: 360px;
+
+                padding:
+                    30px 24px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<div class="navbar">
+
+    <div class="logo">
+
+        ✈ AIR<span>LINK</span>
+
+    </div>
+
+</div>
+
+
+<!-- SIGN UP -->
+
+<div class="signup-page">
+
+
+    <div class="signup-card">
+
+
+        <div class="signup-icon">
+            👤
+        </div>
+
+
+        <h2>
+            Create Account
+        </h2>
+
+
+        <p class="signup-subtitle">
+            Create your AIRLINK account
+        </p>
+
+        {% if error %}
+            <div style="margin-bottom: 20px; padding: 12px 16px; border-radius: 10px; background: #ffe4e6; border: 1px solid #fecdd3; color: #e11d48; font-size: 13px; font-weight: 600; text-align: left;">
+                ⚠️ {{ error }}
+            </div>
+        {% endif %}
+
+        <form
+            method="POST"
+            action="{{ url_for('signup') }}"
+        >
+
+
+            <div class="form-group">
+
+                <label for="username">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter username"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="email">
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="Enter email address"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Create password"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="signup-btn"
+            >
+
+                Create Account →
+
+            </button>
+
+
+        </form>
+
+
+        <div class="login-link">
+
+            Already have an account?
+
+            <a href="{{ url_for('login_page') }}">
+                Login
+            </a>
+
+        </div>
+
+
+        <div class="secure-note">
+
+            🔒 Your account information is securely protected
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>

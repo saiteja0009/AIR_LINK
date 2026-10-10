@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>AIRLINK | AI Processing</title>
+
+<style>
+
+body{
+margin:0;
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+font-family:'Segoe UI',sans-serif;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+color:white;
+overflow:hidden;
+}
+
+/* Title */
+
+h1{
+margin-bottom:10px;
+font-weight:500;
+}
+
+p{
+opacity:.7;
+}
+
+/* Runway */
+
+.runway{
+width:70%;
+height:4px;
+background:rgba(255,255,255,0.25);
+position:relative;
+margin-top:60px;
+border-radius:5px;
+}
+
+/* Plane */
+
+.plane{
+position:absolute;
+top:-20px;
+font-size:36px;
+animation:fly 2.5s linear infinite;
+}
+
+/* Plane movement */
+
+@keyframes fly{
+
+0%{
+left:-40px;
+}
+
+100%{
+left:100%;
+}
+
+}
+
+/* loading text */
+
+.loading{
+margin-top:30px;
+font-size:18px;
+opacity:0.8;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>AI Analyzing Flight Market Trends</h1>
+<p>Running Hybrid ML Models</p>
+
+<div class="runway">
+
+<div class="plane">✈</div>
+
+</div>
+
+<div class="loading">
+Processing AI prediction...
+</div>
+
+<script>
+
+setTimeout(function(){
+
+window.location.href="/result";
+
+},2000);
+
+</script>
+
+</body>
+</html>

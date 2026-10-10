@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIRLINK | Secure Common Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0369a1 100%);
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8%;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span { color: #38bdf8; }
+
+        .login-page {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        /* Decorative Background Elements */
+        .bg-glow-1 {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.2) 0%, rgba(0, 0, 0, 0) 70%);
+            top: 10%;
+            left: 15%;
+            pointer-events: none;
+        }
+
+        .bg-glow-2 {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            bottom: 10%;
+            right: 15%;
+            pointer-events: none;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 440px;
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 40px 36px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .login-icon-badge {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(14, 165, 233, 0.3));
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            font-size: 28px;
+            box-shadow: 0 8px 20px rgba(14, 165, 233, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .login-card:hover .login-icon-badge {
+            transform: scale(1.05);
+        }
+
+        .login-card h2 {
+            margin: 0 0 8px;
+            font-size: 26px;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .login-subtitle {
+            margin: 0 0 28px;
+            font-size: 13.5px;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        /* DUAL LOGIN TOGGLE TABS */
+        .login-toggle-container {
+            display: flex;
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 14px;
+            padding: 4px;
+            margin-bottom: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 12px 10px;
+            border: none;
+            border-radius: 10px;
+            background: transparent;
+            color: #94a3b8;
+            font-family: inherit;
+            font-size: 12.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .toggle-btn.active {
+            background: linear-gradient(135deg, #0284c7, #0369a1);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+        }
+
+        .toggle-btn:hover:not(.active) {
+            color: #f8fafc;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #38bdf8;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .form-group input {
+            box-sizing: border-box;
+            width: 100%;
+            height: 50px;
+            padding: 0 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.6);
+            color: #ffffff;
+            outline: none;
+            font-size: 14px;
+            transition: all 0.25s ease;
+        }
+
+        .form-group input::placeholder {
+            color: #64748b;
+        }
+
+        .form-group input:focus {
+            border-color: #38bdf8;
+            background: rgba(15, 23, 42, 0.85);
+            box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.15);
+        }
+
+        .form-actions-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 22px;
+            font-size: 12.5px;
+        }
+
+        .forgot-link {
+            color: #38bdf8;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .forgot-link:hover {
+            color: #7dd3fc;
+            text-decoration: underline;
+        }
+
+        .login-submit-btn {
+            width: 100%;
+            height: 52px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #0284c7, #06b6d4);
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(2, 132, 199, 0.35);
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .login-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(2, 132, 199, 0.45);
+            background: linear-gradient(135deg, #0369a1, #0891b2);
+        }
+
+        .error-message {
+            margin-bottom: 20px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-message {
+            margin-bottom: 20px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: #6ee7b7;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: left;
+        }
+
+        .register-footer {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .register-footer a {
+            color: #38bdf8;
+            font-weight: 700;
+            text-decoration: none;
+            margin-left: 4px;
+        }
+
+        .register-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .secure-badge {
+            margin-top: 18px;
+            font-size: 11px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <a href="/" class="logo">
+            ✈ AIR<span>LINK</span>
+        </a>
+        <div style="font-size: 12px; color: #94a3b8;">
+            AI-Powered Travel Intelligence Platform
+        </div>
+    </div>
+
+    <!-- MAIN LOGIN CONTAINER -->
+    <div class="login-page">
+        <div class="bg-glow-1"></div>
+        <div class="bg-glow-2"></div>
+
+        <div class="login-card">
+            <div class="login-icon-badge" id="iconBadge">
+                👤
+            </div>
+
+            <h2 id="cardTitle">Welcome to AIRLINK</h2>
+            <p class="login-subtitle" id="cardSubtitle">Access your travel intelligence portal</p>
+
+            <!-- DUAL LOGIN TOGGLE -->
+            <div class="login-toggle-container">
+                <button type="button" class="toggle-btn active" id="tabUser" onclick="switchLoginMode('user')">
+                    <span>👤</span> USER LOGIN
+                </button>
+                <button type="button" class="toggle-btn" id="tabAdmin" onclick="switchLoginMode('admin')">
+                    <span>🛡️</span> ADMIN LOGIN
+                </button>
+            </div>
+
+            {% if error %}
+                <div class="error-message">
+                    <span>⚠️</span> {{ error }}
+                </div>
+            {% endif %}
+
+            {% if info %}
+                <div class="info-message">
+                    <span>✅</span> {{ info }}
+                </div>
+            {% endif %}
+
+            <!-- COMMON LOGIN FORM -->
+            <form method="POST" action="{{ url_for('login_page') }}" id="loginForm">
+                <input type="hidden" name="login_mode" id="loginMode" value="{{ login_mode|default('user') }}">
+                <input type="hidden" name="next" value="{{ next_page|default('') }}">
+
+                <div class="form-group">
+                    <label for="username" id="emailLabel">Email or Username</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Enter your email or username"
+                        required
+                        autocomplete="username"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password" id="passwordLabel">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Enter your password"
+                        required
+                        autocomplete="current-password"
+                    >
+                </div>
+
+                <div class="form-actions-row">
+                    <span style="font-size: 11px; color: #64748b;" id="roleInfoText">Customer Access</span>
+                    <a href="{{ url_for('forgot_password') }}" class="forgot-link">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="login-submit-btn" id="submitBtn">
+                    <span id="submitBtnText">LOGIN</span>
+                    <span>→</span>
+                </button>
+            </form>
+
+            <div class="register-footer" id="registerFooter">
+                Don't have an account?
+                <a href="{{ url_for('signup') }}">Create Account / Register</a>
+            </div>
+
+            <div class="secure-badge">
+                🔒 256-bit Encrypted Role-Based Security
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchLoginMode(mode) {
+            const modeInput = document.getElementById('loginMode');
+            const tabUser = document.getElementById('tabUser');
+            const tabAdmin = document.getElementById('tabAdmin');
+            const iconBadge = document.getElementById('iconBadge');
+            const cardTitle = document.getElementById('cardTitle');
+            const cardSubtitle = document.getElementById('cardSubtitle');
+            const emailLabel = document.getElementById('emailLabel');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const submitBtnText = document.getElementById('submitBtnText');
+            const roleInfoText = document.getElementById('roleInfoText');
+            const registerFooter = document.getElementById('registerFooter');
+
+            modeInput.value = mode;
+
+            if (mode === 'admin') {
+                tabUser.classList.remove('active');
+                tabAdmin.classList.add('active');
+
+                iconBadge.innerHTML = '🛡️';
+                cardTitle.innerText = 'Administrator Portal';
+                cardSubtitle.innerText = 'Authorized AIRLINK System Administration';
+                emailLabel.innerText = 'Admin Email or Username';
+                usernameInput.placeholder = 'Enter admin email (e.g. admin@airlink.com)';
+                passwordInput.placeholder = 'Enter admin password';
+                submitBtnText.innerText = 'ADMIN LOGIN';
+                roleInfoText.innerText = 'Admin Privileges Required';
+                registerFooter.style.display = 'none';
+            } else {
+                tabAdmin.classList.remove('active');
+                tabUser.classList.add('active');
+
+                iconBadge.innerHTML = '👤';
+                cardTitle.innerText = 'Welcome to AIRLINK';
+                cardSubtitle.innerText = 'Access your personal travel & booking portal';
+                emailLabel.innerText = 'Email or Username';
+                usernameInput.placeholder = 'Enter your email or username';
+                passwordInput.placeholder = 'Enter your password';
+                submitBtnText.innerText = 'LOGIN';
+                roleInfoText.innerText = 'Customer Access';
+                registerFooter.style.display = 'block';
+            }
+        }
+
+        // Initialize mode on load if pre-set
+        document.addEventListener("DOMContentLoaded", function() {
+            const initialMode = "{{ login_mode|default('user') }}";
+            switchLoginMode(initialMode === 'admin' ? 'admin' : 'user');
+        });
+    </script>
+</body>
+</html>

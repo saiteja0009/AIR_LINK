@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIRLINK Admin | Flight Management</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #f7fbff, #eef7ff, #e8f4ff);
+            color: #172b4d; min-height: 100vh;
+        }
+        .admin-navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 55px; background: rgba(255,255,255,0.96);
+            border-bottom: 1px solid #e1eaf4; box-shadow: 0 3px 15px rgba(30,80,130,0.08);
+        }
+        .admin-logo { font-size: 25px; font-weight: 800; color: #1769e0; }
+        .admin-logo span { color: #11bfa5; }
+        .admin-nav-links { display: flex; gap: 12px; }
+        .admin-nav-links a {
+            text-decoration: none; padding: 9px 14px; border-radius: 9px;
+            color: #536a85; font-size: 12px; font-weight: 600;
+        }
+        .admin-nav-links a:hover, .admin-nav-links a.active { color: #1677ff; background: #eef6ff; }
+
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        .header { margin-bottom: 25px; }
+        .header h1 { font-size: 28px; margin: 0; color: #0f172a; }
+
+        .card { background: white; border-radius: 16px; padding: 25px; border: 1px solid #dfebf6; box-shadow: 0 8px 25px rgba(30,80,130,0.07); margin-bottom: 30px; }
+        .form-grid { display: grid; grid-template-columns: repeat(6, 1fr) auto; gap: 12px; align-items: end; }
+        .form-group label { display: block; font-size: 10px; font-weight: 700; color: #475569; margin-bottom: 4px; text-transform: uppercase; }
+        .form-group input { width: 100%; height: 38px; padding: 0 10px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 12px; outline: none; }
+        .btn-add { height: 38px; padding: 0 18px; border: none; border-radius: 8px; background: #1677ff; color: white; font-weight: 700; font-size: 12px; cursor: pointer; }
+
+        table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+        th { padding: 12px; background: #f1f5f9; color: #475569; border-bottom: 2px solid #e2e8f0; }
+        td { padding: 12px; border-bottom: 1px solid #f1f5f9; }
+    </style>
+</head>
+<body>
+
+    <div class="admin-navbar">
+        <div class="admin-logo">✈ AIR<span>LINK Admin</span></div>
+        <div class="admin-nav-links">
+            <a href="/admin">Dashboard</a>
+            <a href="/admin/users">Users</a>
+            <a href="/admin/flights" class="active">Flights</a>
+            <a href="/admin/bookings">Bookings</a>
+            <a href="/admin/cancellations">Cancellations</a>
+            <a href="/admin/revenue">Revenue</a>
+            <a href="/admin/analytics">Analytics</a>
+            <a href="/admin/ml-analytics">ML Analytics</a>
+            <a href="/admin/reports">Reports</a>
+            <a href="/admin/settings">Settings</a>
+            <a href="/logout" style="color:#e11d48;">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>✈ Flight Inventory Management</h1>
+        </div>
+
+        <div class="card">
+            <h3 style="margin:0 0 16px; font-size:15px; color:#0f172a;">Add New Active Flight Schedule</h3>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Airline</label>
+                    <input type="text" id="fAirline" placeholder="IndiGo" value="IndiGo">
+                </div>
+                <div class="form-group">
+                    <label>Flight No</label>
+                    <input type="text" id="fNo" placeholder="6E-402" value="6E-402">
+                </div>
+                <div class="form-group">
+                    <label>Source</label>
+                    <input type="text" id="fSource" placeholder="Delhi" value="Delhi">
+                </div>
+                <div class="form-group">
+                    <label>Destination</label>
+                    <input type="text" id="fDest" placeholder="Mumbai" value="Mumbai">
+                </div>
+                <div class="form-group">
+                    <label>Departure</label>
+                    <input type="text" id="fDep" placeholder="08:00 AM" value="08:00 AM">
+                </div>
+                <div class="form-group">
+                    <label>Price (₹)</label>
+                    <input type="number" id="fPrice" placeholder="5500" value="5500">
+                </div>
+                <button class="btn-add" onclick="addFlight()">+ Add Flight</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Flight No</th>
+                        <th>Airline</th>
+                        <th>Route</th>
+                        <th>Departure</th>
+                        <th>Duration</th>
+                        <th>Base Fare</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for f in flights %}
+                    <tr>
+                        <td style="font-weight:700; color:#0f172a;">{{ f.flight_no }}</td>
+                        <td>{{ f.airline }}</td>
+                        <td>{{ f.source }} → {{ f.destination }}</td>
+                        <td>{{ f.departure_time }}</td>
+                        <td>{{ f.duration or '2h 15m' }}</td>
+                        <td style="font-weight:700; color:#0284c7;">₹ {{ f.price }}</td>
+                        <td><span style="background:#dcfce7; color:#15803d; padding:3px 8px; border-radius:6px; font-weight:700; font-size:11px;">ACTIVE</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function addFlight() {
+            const airline = document.getElementById("fAirline").value;
+            const flight_no = document.getElementById("fNo").value;
+            const source = document.getElementById("fSource").value;
+            const destination = document.getElementById("fDest").value;
+            const departure_time = document.getElementById("fDep").value;
+            const price = document.getElementById("fPrice").value;
+
+            fetch("/api/admin/flights/add", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ airline, flight_no, source, destination, departure_time, price })
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(data.message);
+                if(data.status === "success") window.location.reload();
+            });
+        }
+    </script>
+</body>
+</html>

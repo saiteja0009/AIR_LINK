@@ -1,0 +1,1134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AIRLINK | Available Flights</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        /* =====================================================
+           PAGE
+        ===================================================== */
+
+        body {
+            margin: 0;
+
+            font-family:
+                'Segoe UI',
+                Roboto,
+                Arial,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f8fbff,
+                    #eef7ff,
+                    #e5f2ff
+                );
+
+            color: #172b4d;
+
+            min-height: 100vh;
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .flight-navbar {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 14px 45px;
+
+            background: rgba(255,255,255,0.96);
+
+            backdrop-filter: blur(15px);
+
+            border-bottom: 1px solid #e3edf8;
+
+            box-shadow:
+                0 4px 18px rgba(37,99,235,0.08);
+
+            position: sticky;
+
+            top: 0;
+
+            z-index: 1000;
+        }
+
+
+        .flight-logo {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            font-size: 25px;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+
+            color: #172b4d;
+        }
+
+
+        .logo-icon {
+
+            width: 38px;
+
+            height: 38px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1683ff,
+                    #5aa9ff
+                );
+
+            color: white;
+
+            border-radius: 11px;
+
+            font-size: 19px;
+
+            box-shadow:
+                0 6px 15px rgba(37,99,235,0.25);
+        }
+
+
+        .flight-logo span {
+
+            color: #1769e0;
+        }
+
+
+        .flight-nav {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 27px;
+        }
+
+
+        .flight-nav a {
+
+            text-decoration: none;
+
+            color: #536681;
+
+            font-size: 14px;
+
+            font-weight: 500;
+
+            transition: .25s;
+        }
+
+
+        .flight-nav a:hover {
+
+            color: #1769e0;
+        }
+
+
+        .flight-nav .active {
+
+            background: #eef6ff;
+
+            color: #1769e0;
+
+            padding: 9px 14px;
+
+            border-radius: 9px;
+        }
+
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .flight-container {
+
+            width: 88%;
+
+            max-width: 1100px;
+
+            margin: 42px auto 80px;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .page-badge {
+
+            display: inline-block;
+
+            background: #eaf4ff;
+
+            color: #1769e0;
+
+            padding: 8px 15px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .page-header {
+
+            margin-bottom: 28px;
+        }
+
+
+        .page-header h1 {
+
+            margin: 0;
+
+            font-size: 34px;
+
+            color: #172b4d;
+        }
+
+
+        .page-header p {
+
+            margin-top: 8px;
+
+            color: #72839b;
+
+            font-size: 14px;
+        }
+
+
+        /* =====================================================
+           ROUTE SUMMARY
+        ===================================================== */
+
+        .route-summary {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff,
+                    #f5faff
+                );
+
+            border: 1px solid #dceaf8;
+
+            border-radius: 18px;
+
+            padding: 20px 25px;
+
+            margin-bottom: 25px;
+
+            box-shadow:
+                0 10px 28px rgba(38,92,145,0.08);
+        }
+
+
+        .route-location {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+        }
+
+
+        .location-icon {
+
+            width: 43px;
+
+            height: 43px;
+
+            border-radius: 12px;
+
+            background: #edf6ff;
+
+            color: #1769e0;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 20px;
+        }
+
+
+        .location-text {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 3px;
+        }
+
+
+        .location-label {
+
+            font-size: 10px;
+
+            color: #8a9ab0;
+
+            font-weight: 700;
+
+            letter-spacing: 1px;
+        }
+
+
+        .location-name {
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            color: #243b60;
+        }
+
+
+        .route-arrow {
+
+            font-size: 23px;
+
+            color: #55a6ff;
+
+            margin: 0 25px;
+        }
+
+
+        .flight-count {
+
+            background: #f1f7fd;
+
+            color: #657892;
+
+            padding: 9px 14px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: 600;
+        }
+
+
+        /* =====================================================
+           FLIGHT CARD
+        ===================================================== */
+
+        .flight-card {
+
+            display: grid;
+
+            grid-template-columns:
+                1.4fr
+                1fr
+                .7fr
+                auto;
+
+            align-items: center;
+
+            gap: 25px;
+
+            background: rgba(255,255,255,0.98);
+
+            border: 1px solid #dfebf7;
+
+            padding: 22px 25px;
+
+            margin-bottom: 16px;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 8px 25px rgba(38,92,145,0.08);
+
+            transition:
+                transform .25s,
+                box-shadow .25s,
+                border-color .25s;
+        }
+
+
+        .flight-card:hover {
+
+            transform: translateY(-3px);
+
+            border-color: #bcdcff;
+
+            box-shadow:
+                0 15px 35px rgba(38,92,145,0.13);
+        }
+
+
+        /* =====================================================
+           AIRLINE
+        ===================================================== */
+
+        .airline-info {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+        }
+
+
+        .airline-icon {
+
+            width: 43px;
+
+            height: 43px;
+
+            border-radius: 12px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #edf6ff,
+                    #e2f0ff
+                );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            color: #1769e0;
+
+            font-size: 19px;
+        }
+
+
+        .airline-details {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 4px;
+        }
+
+
+        .airline-name {
+
+            font-weight: 700;
+
+            font-size: 15px;
+
+            color: #1d3457;
+        }
+
+
+        .airline-type {
+
+            font-size: 11px;
+
+            color: #8a9ab0;
+        }
+
+
+        /* =====================================================
+           ROUTE
+        ===================================================== */
+
+        .route-info {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 5px;
+        }
+
+
+        .route-text {
+
+            font-size: 13px;
+
+            color: #62748e;
+        }
+
+
+        .route-line {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            font-size: 12px;
+
+            color: #93a1b4;
+        }
+
+
+        .route-line::before {
+
+            content: "";
+
+            width: 35px;
+
+            height: 1px;
+
+            background: #c9d9ea;
+        }
+
+
+        /* =====================================================
+           TIME
+        ===================================================== */
+
+        .time-info {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 5px;
+        }
+
+
+        .time-label {
+
+            font-size: 10px;
+
+            color: #8a9ab0;
+
+            font-weight: 700;
+
+            letter-spacing: .7px;
+        }
+
+
+        .time-value {
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            color: #20385d;
+        }
+
+
+        /* =====================================================
+           PRICE
+        ===================================================== */
+
+        .flight-price {
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: flex-end;
+
+            gap: 8px;
+        }
+
+
+        .price-label {
+
+            font-size: 10px;
+
+            color: #91a0b3;
+
+            font-weight: 600;
+        }
+
+
+        .price {
+
+            font-size: 23px;
+
+            font-weight: 800;
+
+            color: #1769e0;
+
+            white-space: nowrap;
+        }
+
+
+        /* =====================================================
+           BOOK BUTTON
+        ===================================================== */
+
+        .book-btn {
+
+            padding: 11px 22px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1683ff,
+                    #1769e0
+                );
+
+            color: white;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 7px 16px rgba(23,105,224,0.20);
+
+            transition: .25s;
+
+            white-space: nowrap;
+        }
+
+
+        .book-btn:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 11px 22px rgba(23,105,224,0.30);
+        }
+
+
+        /* =====================================================
+           EMPTY STATE
+        ===================================================== */
+
+        .no-flights {
+
+            text-align: center;
+
+            background: white;
+
+            border: 1px solid #deebf8;
+
+            border-radius: 20px;
+
+            padding: 60px 20px;
+
+            box-shadow:
+                0 10px 28px rgba(38,92,145,0.08);
+        }
+
+
+        .no-flights-icon {
+
+            font-size: 45px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .no-flights h2 {
+
+            margin: 0;
+
+            color: #233a5d;
+        }
+
+
+        .no-flights p {
+
+            color: #7c8da4;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 45px;
+
+            color: #8495aa;
+
+            font-size: 12px;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media(max-width:900px) {
+
+            .flight-nav {
+
+                display: none;
+            }
+
+
+            .flight-navbar {
+
+                padding: 14px 20px;
+            }
+
+
+            .flight-card {
+
+                grid-template-columns:
+                    1fr 1fr;
+
+                gap: 20px;
+            }
+
+
+            .flight-price {
+
+                align-items: flex-start;
+            }
+
+
+            .route-summary {
+
+                flex-wrap: wrap;
+
+                gap: 15px;
+            }
+
+        }
+
+
+        @media(max-width:600px) {
+
+            .flight-container {
+
+                width: 92%;
+            }
+
+
+            .page-header h1 {
+
+                font-size: 27px;
+            }
+
+
+            .route-summary {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+
+            .route-arrow {
+
+                transform: rotate(90deg);
+
+                margin: 0 0 0 17px;
+            }
+
+
+            .flight-card {
+
+                grid-template-columns: 1fr;
+
+                gap: 17px;
+            }
+
+
+            .flight-price {
+
+                align-items: flex-start;
+            }
+
+
+            .book-btn {
+
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<div class="flight-navbar">
+
+    <div class="flight-logo">
+
+        <div class="logo-icon">
+            ✈
+        </div>
+
+        <div>
+            AIR<span>LINK</span>
+        </div>
+
+    </div>
+
+
+    <div class="flight-nav">
+
+        <a href="/home">
+            Home
+        </a>
+
+        <a href="/booking-status">
+            Status
+        </a>
+
+        <a href="/history">
+            History
+        </a>
+
+        <a href="/support">
+            Support
+        </a>
+
+        {% if session.user %}
+            <a href="/logout" style="color: #e11d48;">
+                Logout
+            </a>
+        {% else %}
+            <a href="/login">
+                Login
+            </a>
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MAIN CONTENT
+===================================================== -->
+
+<div class="flight-container">
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <div class="page-badge">
+            ✈ FLIGHT OPTIONS
+        </div>
+
+        <h1>
+            Available Flights
+        </h1>
+
+        <p>
+            Compare available flights and choose the option that fits your journey.
+        </p>
+
+    </div>
+
+
+    {% if flights %}
+
+
+    <!-- =================================================
+         ROUTE SUMMARY
+    ================================================= -->
+
+    <div class="route-summary">
+
+        {% set first_flight = flights[0] %}
+
+
+        <div class="route-location">
+
+            <div class="location-icon">
+                📍
+            </div>
+
+            <div class="location-text">
+
+                <div class="location-label">
+                    FROM
+                </div>
+
+                <div class="location-name">
+                    {{ first_flight.source }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="route-arrow">
+            →
+        </div>
+
+
+        <div class="route-location">
+
+            <div class="location-icon">
+                📍
+            </div>
+
+            <div class="location-text">
+
+                <div class="location-label">
+                    TO
+                </div>
+
+                <div class="location-name">
+                    {{ first_flight.destination }}
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="flight-count">
+
+            ✈ {{ flights|length }} Flights Available
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         FLIGHTS
+    ================================================= -->
+
+    {% for flight in flights %}
+
+    <div class="flight-card">
+
+
+        <!-- AIRLINE -->
+
+        <div class="airline-info">
+
+            <div class="airline-icon">
+                ✈
+            </div>
+
+            <div class="airline-details">
+
+                <div class="airline-name">
+                    {{ flight.airline }}
+                </div>
+
+                <div class="airline-type">
+                    Scheduled Flight
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ROUTE -->
+
+        <div class="route-info">
+
+            <div class="route-text">
+
+                {{ flight.source }}
+                →
+                {{ flight.destination }}
+
+            </div>
+
+            <div class="route-line">
+                Direct / Scheduled
+            </div>
+
+        </div>
+
+
+
+        <!-- DEPARTURE -->
+
+        <div class="time-info">
+
+            <div class="time-label">
+                DEPARTURE
+            </div>
+
+            <div class="time-value">
+                {{ flight.time }}
+            </div>
+
+        </div>
+
+
+
+        <!-- PRICE + BOOK -->
+
+        <div class="flight-price">
+
+            <div>
+
+                <div class="price-label">
+                    ESTIMATED FARE
+                </div>
+
+                <div class="price">
+                    ₹ {{ flight.price }}
+                </div>
+
+            </div>
+
+
+            <button
+                class="book-btn"
+                onclick="bookFlight(
+                    '{{ flight.airline|e }}',
+                    '{{ flight.price|e }}',
+                    '{{ flight.source|e }}',
+                    '{{ flight.destination|e }}'
+                )">
+
+                Book Flight →
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+    {% endfor %}
+
+
+    {% else %}
+
+
+    <!-- =================================================
+         NO FLIGHTS
+    ================================================= -->
+
+    <div class="no-flights">
+
+        <div class="no-flights-icon">
+            ✈️
+        </div>
+
+        <h2>
+            No Flights Found
+        </h2>
+
+        <p>
+            We couldn't find available flights for this route.
+            Try searching for another destination.
+        </p>
+
+    </div>
+
+
+    {% endif %}
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        © 2026 AIRLINK | AI Flight Intelligence Platform
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+    function bookFlight(
+        airline,
+        price,
+        source,
+        destination
+    ) {
+
+        const url =
+            "/booking?" +
+
+            "airline=" +
+            encodeURIComponent(airline) +
+
+            "&price=" +
+            encodeURIComponent(price) +
+
+            "&source=" +
+            encodeURIComponent(source) +
+
+            "&destination=" +
+            encodeURIComponent(destination);
+
+
+        window.location.href = url;
+
+    }
+
+</script>
+
+
+</body>
+
+</html>

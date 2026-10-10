@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AIRLINK | Support</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        /* =====================================================
+           SUPPORT PAGE
+        ===================================================== */
+
+        .support-page {
+            min-height: calc(100vh - 72px);
+            padding: 55px 7% 70px;
+
+            background:
+                radial-gradient(
+                    circle at 85% 10%,
+                    rgba(80, 170, 255, 0.18),
+                    transparent 30%
+                ),
+                linear-gradient(
+                    135deg,
+                    #ffffff 0%,
+                    #f5faff 45%,
+                    #e6f4ff 100%
+                );
+        }
+
+
+        /* HEADER */
+
+        .support-header {
+            max-width: 850px;
+            margin: 0 auto 35px;
+            text-align: center;
+        }
+
+        .support-badge {
+            display: inline-block;
+
+            padding: 7px 14px;
+
+            border-radius: 20px;
+
+            background: #eaf4ff;
+            border: 1px solid #d5eaff;
+
+            color: #1473ff;
+
+            font-size: 10px;
+            font-weight: 800;
+
+            letter-spacing: 0.5px;
+        }
+
+        .support-header h1 {
+            margin: 17px 0 10px;
+
+            color: #172b4d;
+
+            font-size: 36px;
+            font-weight: 800;
+        }
+
+        .support-header h1 span {
+            color: #1473ff;
+        }
+
+        .support-header p {
+            margin: 0;
+
+            color: #7186a4;
+
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+
+        /* MAIN SUPPORT CARD */
+
+        .support-card {
+            max-width: 950px;
+
+            margin: 0 auto;
+
+            padding: 35px;
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 25px;
+
+            background: rgba(255, 255, 255, 0.96);
+
+            border: 1px solid #dceaf7;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 18px 45px rgba(42, 91, 140, 0.11);
+        }
+
+
+        /* LEFT SIDE */
+
+        .support-info {
+            padding: 10px;
+        }
+
+        .support-info h2 {
+            margin: 0 0 8px;
+
+            color: #172b4d;
+
+            font-size: 21px;
+        }
+
+        .support-info > p {
+            margin: 0 0 25px;
+
+            color: #8194ad;
+
+            font-size: 11px;
+            line-height: 1.7;
+        }
+
+
+        /* CONTACT ITEMS */
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+
+            gap: 13px;
+
+            margin-bottom: 17px;
+        }
+
+        .contact-icon {
+            width: 43px;
+            height: 43px;
+
+            flex-shrink: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 12px;
+
+            background: #eaf3ff;
+
+            color: #1473ff;
+
+            font-size: 18px;
+        }
+
+        .contact-text strong {
+            display: block;
+
+            margin-bottom: 3px;
+
+            color: #526b8b;
+
+            font-size: 9px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.5px;
+        }
+
+        .contact-text span,
+        .contact-text a {
+            color: #172b4d;
+
+            font-size: 11px;
+
+            font-weight: 600;
+
+            text-decoration: none;
+        }
+
+        .contact-text a:hover {
+            color: #1473ff;
+        }
+
+
+        /* WORKING HOURS */
+
+        .working-hours {
+            margin-top: 25px;
+
+            padding: 14px 16px;
+
+            border-radius: 11px;
+
+            background: #f2f8ff;
+
+            border: 1px solid #deebf8;
+
+            color: #527092;
+
+            font-size: 10px;
+        }
+
+        .working-hours strong {
+            color: #1473ff;
+        }
+
+
+        /* RIGHT SIDE */
+
+        .support-right {
+            padding: 10px;
+        }
+
+        .support-right h3 {
+            margin: 0 0 18px;
+
+            color: #172b4d;
+
+            font-size: 17px;
+        }
+
+
+        /* SUPPORT OPTIONS */
+
+        .support-option {
+            display: flex;
+            align-items: center;
+
+            gap: 12px;
+
+            margin-bottom: 12px;
+
+            padding: 15px;
+
+            background: #f8fbff;
+
+            border: 1px solid #e1edf8;
+
+            border-radius: 12px;
+
+            transition: all 0.25s ease;
+        }
+
+        .support-option:hover {
+            transform: translateY(-2px);
+
+            background: #ffffff;
+
+            border-color: #cfe3f8;
+
+            box-shadow:
+                0 8px 20px rgba(40, 90, 140, 0.08);
+        }
+
+        .option-icon {
+            width: 39px;
+            height: 39px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 10px;
+
+            background: #eaf3ff;
+
+            color: #1473ff;
+
+            font-size: 17px;
+        }
+
+        .support-option strong {
+            display: block;
+
+            margin-bottom: 3px;
+
+            color: #172b4d;
+
+            font-size: 11px;
+        }
+
+        .support-option span {
+            color: #8194ad;
+
+            font-size: 9px;
+        }
+
+
+        /* BACK BUTTON */
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+
+            gap: 6px;
+
+            margin-top: 28px;
+
+            padding: 10px 18px;
+
+            border-radius: 9px;
+
+            background: #1473ff;
+
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 10px;
+            font-weight: 700;
+
+            box-shadow:
+                0 7px 17px rgba(20, 115, 255, 0.20);
+
+            transition: all 0.25s ease;
+        }
+
+        .back-home:hover {
+            transform: translateY(-2px);
+
+            background: #0866ed;
+
+            box-shadow:
+                0 10px 22px rgba(20, 115, 255, 0.28);
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 750px) {
+
+            .support-page {
+                padding: 40px 20px 55px;
+            }
+
+            .support-header h1 {
+                font-size: 30px;
+            }
+
+            .support-card {
+                grid-template-columns: 1fr;
+
+                padding: 25px 20px;
+            }
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <header class="navbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                ✈
+            </div>
+
+            <div class="brand-text">
+
+                <div class="logo">
+                    AIR<span>LINK</span>
+                </div>
+
+                <div class="tagline">
+                    Fly Smarter, Spend Better
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <nav class="nav-links">
+
+            <a href="/home">
+                Home
+            </a>
+
+            <a href="/booking-status">
+                Status
+            </a>
+
+            <a href="/history">
+                History
+            </a>
+
+            <a href="/support" class="active">
+                Support
+            </a>
+
+            {% if session.user %}
+                <a href="/logout" style="color:#e11d48; font-weight:700;">
+                    Logout
+                </a>
+            {% else %}
+                <a href="/login" class="login-btn">
+                    ♙ Login
+                </a>
+            {% endif %}
+
+        </nav>
+
+    </header>
+
+
+    <!-- =========================
+         SUPPORT PAGE
+    ========================== -->
+
+    <main class="support-page">
+
+
+        <!-- HEADER -->
+
+        <section class="support-header">
+
+            <div class="support-badge">
+                🎧 CUSTOMER SUPPORT
+            </div>
+
+            <h1>
+                How Can We <span>Help You?</span>
+            </h1>
+
+            <p>
+                Our AIRLINK support team is here to help with bookings,
+                payments, tickets and travel-related questions.
+            </p>
+
+        </section>
+
+
+        <!-- SUPPORT CARD -->
+
+        <section class="support-card">
+
+
+            <!-- CONTACT INFORMATION -->
+
+            <div class="support-info">
+
+                <h2>
+                    Customer Support
+                </h2>
+
+                <p>
+                    Get in touch with the AIRLINK support team
+                    whenever you need assistance.
+                </p>
+
+
+                <!-- EMAIL -->
+
+                <div class="contact-item">
+
+                    <div class="contact-icon">
+                        ✉
+                    </div>
+
+                    <div class="contact-text">
+
+                        <strong>Email</strong>
+
+                        <a href="mailto:support@airlink.com">
+                            support@airlink.com
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PHONE -->
+
+                <div class="contact-item">
+
+                    <div class="contact-icon">
+                        ☎
+                    </div>
+
+                    <div class="contact-text">
+
+                        <strong>Phone</strong>
+
+                        <a href="tel:+919876543210">
+                            +91 9876543210
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- WORKING HOURS -->
+
+                <div class="working-hours">
+
+                    🕒
+
+                    <strong>
+                        Working Hours:
+                    </strong>
+
+                    9:00 AM - 8:00 PM
+
+                </div>
+
+
+                <a href="/home" class="back-home">
+                    ← Back to Home
+                </a>
+
+            </div>
+
+
+            <!-- SUPPORT OPTIONS -->
+
+            <div class="support-right">
+
+                <h3>
+                    What do you need help with?
+                </h3>
+
+
+                <div class="support-option">
+
+                    <div class="option-icon">
+                        ✈
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Flight Booking
+                        </strong>
+
+                        <span>
+                            Help with booking and flight details
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="support-option">
+
+                    <div class="option-icon">
+                        🎫
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Ticket & Booking Status
+                        </strong>
+
+                        <span>
+                            Check your reservation and ticket information
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="support-option">
+
+                    <div class="option-icon">
+                        ₹
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Payment Support
+                        </strong>
+
+                        <span>
+                            Assistance with payment and booking confirmation
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="support-option">
+
+                    <div class="option-icon">
+                        💬
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            General Assistance
+                        </strong>
+
+                        <span>
+                            Questions about using the AIRLINK platform
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+
+        <div class="footer-left">
+
+            <strong>
+                © 2026 AIRLINK
+            </strong>
+
+            <span>
+                AI Flight Intelligence Platform
+            </span>
+
+            <p>
+                Travel Smarter. A Greener Tomorrow.
+            </p>
+
+        </div>
+
+        <div class="footer-right">
+
+            <span>
+                #FlySmarter
+            </span>
+
+            <span class="leaf">
+                🌱
+            </span>
+
+        </div>
+
+    </footer>
+
+</body>
+</html>

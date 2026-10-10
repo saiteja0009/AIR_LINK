@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIRLINK | My Saved Flights</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #f8fcff, #eef7ff, #e8f4ff);
+            color: #172b4d; min-height: 100vh;
+        }
+        .navbar {
+            height: 72px; display: flex; justify-content: space-between; align-items: center;
+            padding: 0 55px; background: rgba(255,255,255,0.97);
+            border-bottom: 1px solid #e3edf7; box-shadow: 0 3px 15px rgba(40,90,140,0.08);
+        }
+        .logo { font-size: 25px; font-weight: 800; color: #1769e0; }
+        .logo span { color: #11bfa5; }
+        .nav-links { display: flex; gap: 15px; }
+        .nav-links a { text-decoration: none; color: #475569; font-weight: 600; font-size: 13px; padding: 8px 12px; border-radius: 8px; }
+        .nav-links a:hover, .nav-links a.active { color: #1473ff; background: #e0f2fe; }
+
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+        .header { margin-bottom: 30px; }
+        .header h1 { font-size: 28px; margin: 0 0 8px; color: #0f172a; }
+        .header p { margin: 0; color: #64748b; font-size: 14px; }
+
+        .flights-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 20px; }
+        .card {
+            background: white; border-radius: 18px; padding: 22px;
+            border: 1px solid #e2e8f0; box-shadow: 0 8px 25px rgba(0,0,0,0.04); transition: 0.2s;
+        }
+        .card:hover { transform: translateY(-3px); }
+        .airline-title { font-size: 16px; font-weight: 800; color: #1473ff; margin-bottom: 6px; }
+        .route { font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 12px; }
+        .price-tag { font-size: 20px; font-weight: 800; color: #0284c7; margin-bottom: 16px; }
+        .actions { display: flex; gap: 10px; }
+        .btn-book { flex: 1; padding: 10px; border-radius: 8px; background: #1473ff; color: white; border: none; font-weight: 700; text-align: center; text-decoration: none; font-size: 13px; }
+        .btn-remove { padding: 10px 14px; border-radius: 8px; background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; font-weight: 600; cursor: pointer; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="logo">✈ AIR<span>LINK</span></div>
+        <div class="nav-links">
+            <a href="/home">Home</a>
+            <a href="/price-intelligence">AI Intelligence</a>
+            <a href="/history">My Bookings</a>
+            <a href="/price-alerts">Price Alerts</a>
+            <a href="/saved-flights" class="active">Saved Flights</a>
+            <a href="/ai-assistant">AI Assistant</a>
+            <a href="/logout" style="color:#e11d48;">Logout</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>♡ My Saved Flights</h1>
+            <p>Your bookmarked flights for quick booking and fare tracking.</p>
+        </div>
+
+        <div class="flights-grid">
+            {% if saved %}
+                {% for f in saved %}
+                <div class="card">
+                    <div class="airline-title">✈ {{ f.airline }} ({{ f.flight_no or '6E-101' }})</div>
+                    <div class="route">{{ f.source }} → {{ f.destination }}</div>
+                    <div class="price-tag">₹ {{ f.price }}</div>
+
+                    <div class="actions">
+                        <a href="/booking?source={{ f.source }}&destination={{ f.destination }}&airline={{ f.airline }}&price={{ f.price }}" class="btn-book">Book Now →</a>
+                        <button class="btn-remove" onclick="removeSaved('{{ f.airline }}', '{{ f.source }}', '{{ f.destination }}')">✕ Remove</button>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p style="color:#64748b; font-size:14px;">You have no saved flights yet. Click '♡ Save' on flight search cards to bookmark flights!</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        function removeSaved(airline, source, destination) {
+            fetch("/api/saved-flights/toggle", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ airline, source, destination })
+            })
+            .then(res => res.json())
+            .then(data => window.location.reload());
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIRLINK | Verify Email OTP</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; min-height: 100vh;
+            font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #f8fcff, #eef7ff, #e8f4ff);
+            color: #172b4d;
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .card {
+            width: 420px; max-width: 100%;
+            background: white; border-radius: 20px;
+            padding: 36px; box-shadow: 0 15px 45px rgba(40, 90, 140, 0.12);
+            border: 1px solid #dceaf7; text-align: center;
+        }
+        .icon-box {
+            width: 56px; height: 56px; margin: 0 auto 18px;
+            background: #e0f2fe; color: #0284c7; border-radius: 16px;
+            display: flex; align-items: center; justify-content: center; font-size: 26px;
+        }
+        h2 { margin: 0 0 8px; font-size: 24px; color: #0f172a; }
+        p { margin: 0 0 20px; font-size: 13px; color: #64748b; line-height: 1.5; }
+        .info-badge {
+            background: #f0f9ff; border: 1px solid #bae6fd; color: #0369a1;
+            padding: 10px 14px; border-radius: 10px; font-size: 12px; margin-bottom: 20px; text-align: left;
+        }
+        .otp-input {
+            width: 100%; height: 52px; letter-spacing: 12px; font-size: 24px; font-weight: 800;
+            text-align: center; border: 2px solid #cbd5e1; border-radius: 12px;
+            background: #f8fafc; outline: none; margin-bottom: 20px;
+        }
+        .otp-input:focus { border-color: #0284c7; background: white; }
+        .timer { font-size: 12px; color: #e11d48; font-weight: 600; margin-bottom: 18px; }
+        .btn {
+            width: 100%; height: 48px; border: none; border-radius: 10px;
+            background: linear-gradient(135deg, #1473ff, #12bfa5);
+            color: white; font-weight: 700; font-size: 14px; cursor: pointer;
+            box-shadow: 0 8px 20px rgba(20, 115, 255, 0.25); transition: 0.2s;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .error { background: #fff1f2; border: 1px solid #fecdd3; color: #e11d48; padding: 10px; border-radius: 8px; font-size: 12px; margin-bottom: 18px; text-align: left; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="icon-box">✉️</div>
+        <h2>Verify Email OTP</h2>
+        <p>Enter the 6-digit OTP sent to your registered email address.</p>
+
+        {% if info %}
+            <div class="info-badge">ℹ️ {{ info }}</div>
+        {% endif %}
+
+        {% if error %}
+            <div class="error">⚠️ {{ error }}</div>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('verify_otp') }}">
+            <input type="text" name="otp" class="otp-input" placeholder="••••••" maxlength="6" required autofocus>
+
+            <div class="timer">
+                ⏱️ OTP expires in <span id="countdown">04:59</span>
+            </div>
+
+            <button type="submit" class="btn">Verify OTP & Continue →</button>
+        </form>
+    </div>
+
+    <script>
+        let duration = 299;
+        const display = document.getElementById('countdown');
+        setInterval(() => {
+            let minutes = parseInt(duration / 60, 10);
+            let seconds = parseInt(duration % 60, 10);
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+            display.textContent = minutes + ":" + seconds;
+            if (--duration < 0) { duration = 0; display.textContent = "Expired"; }
+        }, 1000);
+    </script>
+</body>
+</html>

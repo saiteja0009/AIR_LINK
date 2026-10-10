@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>AIRLINK | Analytics Dashboard</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="navbar">
+<div class="logo">AIR<span>LINK</span></div>
+<div class="nav-links">
+<a href="/">Home</a>
+<a href="/analytics">Analytics</a>
+<a href="/admin">Admin</a>
+<a href="/support">Support</a>
+</div>
+</div>
+
+<div class="analytics-container">
+
+<h1>Flight Price Analytics</h1>
+
+<div class="chart-box">
+<h3>Average Price by Airline</h3>
+<canvas id="airlineChart"height=120></canvas>
+</div>
+
+<div class="chart-box">
+<h3>Monthly Price Trend</h3>
+<canvas id="monthChart"height="120"></canvas>
+</div>
+
+<div class="chart-box">
+<h3>Top Flight Routes</h3>
+<canvas id="routeChart"height="120"></canvas>
+</div>
+
+<div class="chart-box">
+<h3>Price Distribution</h3>
+<canvas id="priceChart"height="120"></canvas>
+</div>
+
+</div>
+
+<script>
+
+fetch("/analytics-data")
+.then(res => res.json())
+.then(data => {
+
+new Chart(document.getElementById("airlineChart"), {
+type: "bar",
+data: {
+labels: data.airlines,
+datasets: [{
+label: "Average Price",
+data: data.airline_prices
+}]
+}
+});
+
+new Chart(document.getElementById("monthChart"), {
+type: "line",
+data: {
+labels: data.months,
+datasets: [{
+label: "Monthly Price",
+data: data.month_prices
+}]
+}
+});
+
+new Chart(document.getElementById("routeChart"), {
+type: "bar",
+data: {
+labels: data.routes,
+datasets: [{
+label: "Flights",
+data: data.route_counts
+}]
+}
+});
+
+new Chart(document.getElementById("priceChart"), {
+type: "bar",
+data: {
+labels: data.price_bins,
+datasets: [{
+label: "Flights",
+data: data.price_counts
+}]
+}
+});
+
+});
+
+</script>
+
+</body>
+</html>
